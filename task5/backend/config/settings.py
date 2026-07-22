@@ -25,8 +25,10 @@ SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = [ "127.0.0.1" , "127.0.0.1:8000","localhost","http://localhost:8000",
-    "http://localhost:3000"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     # "ckeditor",
     # "ckeditor_uploader",
     "apps.users.apps.UsersConfig",
+    "apps.warehouses.apps.WarehousesConfig"
 ]
 
 
@@ -91,12 +94,15 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
 ]
+
 
 ROOT_URLCONF = 'config.urls'
 

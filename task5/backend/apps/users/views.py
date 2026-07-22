@@ -440,7 +440,68 @@ def login(request):
         refresh.access_token,
         refresh
     )
+################   refresh_token   ################
+@extend_schema(
+    summary="Refresh access token",
+    description=(
+        "Generates a new access token using "
+        "the refresh token stored in the HTTPOnly cookie."
+    ),
+    responses={
+        200: {
+            "description": "Access token refreshed successfully"
+        },
+        401: {
+            "description": "Invalid or expired refresh token"
+        }
+    }
+)
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def refresh_access_token(request):
+    refresh_token = request.COOKIES.get(
+        REFRESH_COOKIE_NAME
+    )
+    if not refresh_token:
+        return Response(
+            {
+                "error":
+                "refresh token not found"
+            },
+            status=401
+        )
+    try:
+        refresh = RefreshToken(
+            refresh_token
+        )
+        access_token = refresh.access_token
+        response = Response(
+            {
+                "message":
+                "access token refreshed successfully"
+            },
+            status=200
+        )
+        response.set_cookie(
+            key=ACCESS_COOKIE_NAME,
+            value=str(
+                access_token
+            ),
+            httponly=True,
+            secure=False,
+            samesite="Lax",
+            max_age=60 * 15
 
+        )
+        return response
+    except Exception:
+        return Response(
+            {
+                "error":
+                "refresh token is invalid or expired"
+            },
+            status=401
+        )
 ############    profile   ############
 @extend_schema(
     summary="Get current user profile",
