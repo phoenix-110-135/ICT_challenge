@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+from datetime import timedelta
 from decouple import config
 from pathlib import Path
 
@@ -50,8 +50,10 @@ INSTALLED_APPS = [
     # "ckeditor",
     # "ckeditor_uploader",
     "apps.users.apps.UsersConfig",
-    "apps.warehouses.apps.WarehousesConfig"
+    "apps.warehouses.apps.WarehousesConfig",
+    "apps.inventory.apps.InventoryConfig",
 ]
+
 
 
 REST_FRAMEWORK = {
@@ -68,6 +70,21 @@ REST_FRAMEWORK = {
     # ],
 }
 
+SIMPLE_JWT = {
+
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+
+        minutes=15
+
+    ),
+
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+
+        days=7
+
+    ),
+
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
