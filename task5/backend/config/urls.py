@@ -26,4 +26,6 @@ urlpatterns = [
     path("api/",include("apps.warehouses.urls")),
     path("api/inventory/",include("apps.inventory.urls")),
     path("api/orders/",include("apps.orders.urls")),
+    path("api/routing/",include("apps.routing.urls")),
+    path("api/policies/",include("apps.policies.urls")),
 ]
