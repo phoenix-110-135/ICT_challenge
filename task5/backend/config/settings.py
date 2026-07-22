@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.warehouses.apps.WarehousesConfig",
     "apps.inventory.apps.InventoryConfig",
+    "apps.orders.apps.OrdersConfig",
+    "apps.policies.apps.PoliciesConfig",
+    "apps.routing.apps.RoutingConfig",
 ]
 
 

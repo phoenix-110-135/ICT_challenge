@@ -1,3 +1,44 @@
-from django.shortcuts import render
+from rest_framework.viewsets import (
+    ModelViewSet
+)
 
-# Create your views here.
+from rest_framework.permissions import (
+    IsAuthenticated
+)
+
+from .models import Order
+
+from .serializers import (
+    OrderSerializer
+)
+
+
+class OrderViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Order.objects
+
+        .select_related(
+
+            "sku"
+
+        )
+
+    )
+
+
+    serializer_class = (
+
+        OrderSerializer
+
+    )
+
+
+    permission_classes = [
+
+        IsAuthenticated
+
+    ]
