@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     # "jalali_date",
     # "ckeditor",
     # "ckeditor_uploader",
-    # "apps.users.apps.UsersConfig",
+    "apps.users.apps.UsersConfig",
 ]
 
 
