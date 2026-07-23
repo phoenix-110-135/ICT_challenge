@@ -1,59 +1,53 @@
+from django.db.models import F, ExpressionWrapper
+from django.db.models import IntegerField
+
 from apps.inventory.models import WarehouseInventory
 
 
-def get_eligible_warehouses(
-    sku_id,
-    quantity
+def get_eligible_inventories(
+    order
 ):
 
-    inventories = (
+    return (
 
         WarehouseInventory.objects
 
         .select_related(
+
             "warehouse",
+
             "sku"
+
+        )
+
+        .annotate(
+
+            available_stock=
+
+                ExpressionWrapper(
+
+                    F("quantity")
+
+                    -
+
+                    F("reserved_quantity"),
+
+                    output_field=
+
+                        IntegerField()
+
+                )
+
         )
 
         .filter(
 
-            sku_id=sku_id,
-            quantity__gte=quantity
+            sku=order.sku,
+
+            available_stock__gte=order.quantity,
+
+            warehouse__is_active=True
+
         )
 
     )
-
-    eligible_warehouses = []
-    for inventory in inventories:
-        available_quantity = (
-            inventory.quantity
-            -
-            inventory.reserved_quantity
-
-        )
-
-        if (
-
-            available_quantity
-            >=
-            quantity
-
-        ):
-
-            eligible_warehouses.append(
-
-                {
-                    "warehouse":
-                    inventory.warehouse,
-
-                    "inventory":
-                    inventory,
-                    
-                    "available_quantity":
-                    available_quantity
-
-                }
-
-            )
-
-    return eligible_warehouses
