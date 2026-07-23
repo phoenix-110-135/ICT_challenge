@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ورود | سیستم هوشمند مسیریابی سفارش
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    #172554,
+                    #020617 55%
+                );
+
+            color: #f8fafc;
+
+        }
+
+        .container {
+
+            width: min(
+                460px,
+                100%
+            );
+
+        }
+
+        .card {
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.92
+                );
+
+            border: 1px solid
+                rgba(
+                    148,
+                    163,
+                    184,
+                    0.18
+                );
+
+            box-shadow:
+                0 25px 80px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.4
+                );
+
+        }
+
+        .logo {
+
+            width: 65px;
+
+            height: 65px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 20px;
+
+            border-radius: 20px;
+
+            font-size: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+        }
+
+        h1 {
+
+            margin: 0 0 10px;
+
+            text-align: center;
+
+        }
+
+        .description {
+
+            margin-bottom: 30px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            line-height: 2;
+
+            font-size: 14px;
+
+        }
+
+        .field {
+
+            margin-bottom: 18px;
+
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 14px 16px;
+
+            color: white;
+
+            background:
+                rgba(
+                    2,
+                    6,
+                    23,
+                    0.8
+                );
+
+            border: 1px solid
+                #334155;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+        }
+
+        input:focus {
+
+            border-color:
+                #3b82f6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.15
+                );
+
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 10px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            font-family: inherit;
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+        }
+
+        button:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+        .status {
+
+            display: none;
+
+            padding: 14px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            line-height: 1.8;
+
+            font-size: 14px;
+
+        }
+
+        .status.show {
+
+            display: block;
+
+        }
+
+        .status.success {
+
+            color: #bbf7d0;
+
+            background:
+                rgba(
+                    22,
+                    163,
+                    74,
+                    0.15
+                );
+
+        }
+
+        .status.error {
+
+            color: #fecaca;
+
+            background:
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.15
+                );
+
+        }
+
+        .status.info {
+
+            color: #bfdbfe;
+
+            background:
+                rgba(
+                    30,
+                    64,
+                    175,
+                    0.18
+                );
+
+        }
+
+        .bottom-link {
+
+            margin-top: 22px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+        }
+
+        .bottom-link a {
+
+            color: #60a5fa;
+
+            text-decoration: none;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="logo">
+            🔑
+        </div>
+
+        <h1>
+            ورود به حساب
+        </h1>
+
+        <div class="description">
+
+            وارد حساب کاربری خود شوید و
+            بهترین مسیر ارسال سفارش را پیدا کنید.
+
+        </div>
+
+        <div
+            id="status"
+            class="status"
+        ></div>
+
+        <form
+            id="loginForm"
+        >
+
+            <div class="field">
+
+                <label>
+                    نام کاربری یا شماره موبایل
+                </label>
+
+                <input
+                    id="identifier"
+                    type="text"
+                    required
+                    placeholder="نام کاربری یا شماره موبایل"
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    رمز عبور
+                </label>
+
+                <input
+                    id="password"
+                    type="password"
+                    required
+                    placeholder="رمز عبور"
+                >
+
+            </div>
+
+            <button
+                id="loginButton"
+                type="submit"
+            >
+
+                ورود به حساب
+
+            </button>
+
+        </form>
+
+        <div class="bottom-link">
+
+            حساب کاربری ندارید؟
+
+            <a href="register.html">
+                ثبت‌نام کنید
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const API_BASE_URL =
+        "http://127.0.0.1:8000/api";
+
+
+    function setStatus(
+        message,
+        type = "info"
+    ) {
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+        status.className =
+            `status show ${type}`;
+
+        status.innerHTML =
+            message;
+
+    }
+
+
+    document
+        .getElementById(
+            "loginForm"
+        )
+        .addEventListener(
+
+            "submit",
+
+            async function (
+                event
+            ) {
+
+                event.preventDefault();
+
+
+                const button =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+
+                button.disabled =
+                    true;
+
+
+                setStatus(
+                    "در حال ورود...",
+                    "info"
+                );
+
+
+                const payload = {
+
+                    identifier:
+                        document
+                            .getElementById(
+                                "identifier"
+                            )
+                            .value
+                            .trim(),
+
+                    password:
+                        document
+                            .getElementById(
+                                "password"
+                            )
+                            .value
+
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+
+                            `${API_BASE_URL}/users/login/`,
+
+                            {
+
+                                method:
+                                    "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                credentials:
+                                    "include",
+
+                                body:
+                                    JSON.stringify(
+                                        payload
+                                    )
+
+                            }
+
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok
+                    ) {
+
+                        throw {
+
+                            status:
+                                response.status,
+
+                            data
+
+                        };
+
+                    }
+
+
+                    setStatus(
+
+                        "ورود با موفقیت انجام شد. در حال انتقال...",
+
+                        "success"
+
+                    );
+
+
+                    setTimeout(
+
+                        function () {
+
+                            window.location.href =
+                                "warehouse.html";
+
+                        },
+
+                        1000
+
+                    );
+
+                }
+
+                catch (
+                    error
+                ) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    const message =
+                        error.data?.detail ||
+                        error.data?.message ||
+                        "نام کاربری یا رمز عبور اشتباه است.";
+
+
+                    setStatus(
+
+                        message,
+
+                        "error"
+
+                    );
+
+
+                    button.disabled =
+                        false;
+
+                }
+
+            }
+
+        );
+
+</script>
+
+</body>
+
+</html>

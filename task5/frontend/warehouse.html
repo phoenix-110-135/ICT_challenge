@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
+
+<title>
+    سیستم هوشمند مسیریابی سفارش
+</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+
+        margin: 0;
+
+        min-height: 100vh;
+
+        font-family:
+            Tahoma,
+            Arial,
+            sans-serif;
+
+        background:
+            radial-gradient(
+                circle at top right,
+                #172554,
+                #020617 45%
+            );
+
+        color: #f8fafc;
+
+    }
+
+    .container {
+
+        width: min(
+            1100px,
+            calc(100% - 30px)
+        );
+
+        margin: 0 auto;
+
+        padding: 35px 0 60px;
+
+    }
+
+    .hero {
+
+        padding: 40px;
+
+        margin-bottom: 25px;
+
+        border-radius: 28px;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(30, 64, 175, 0.95),
+                rgba(15, 23, 42, 0.95)
+            );
+
+        border: 1px solid
+            rgba(96, 165, 250, 0.25);
+
+        box-shadow:
+            0 25px 80px
+            rgba(0, 0, 0, 0.35);
+
+    }
+
+    .badge {
+
+        display: inline-block;
+
+        padding: 8px 15px;
+
+        margin-bottom: 15px;
+
+        border-radius: 50px;
+
+        background:
+            rgba(147, 197, 253, 0.12);
+
+        color: #bfdbfe;
+
+        border: 1px solid
+            rgba(147, 197, 253, 0.2);
+
+        font-size: 13px;
+
+    }
+
+    h1 {
+
+        margin: 0 0 12px;
+
+        font-size: clamp(
+            25px,
+            4vw,
+            42px
+        );
+
+    }
+
+    .hero p {
+
+        margin: 0;
+
+        max-width: 700px;
+
+        color: #cbd5e1;
+
+        line-height: 2;
+
+    }
+
+    .card {
+
+        padding: 28px;
+
+        margin-bottom: 22px;
+
+        border-radius: 22px;
+
+        background:
+            rgba(15, 23, 42, 0.88);
+
+        border: 1px solid
+            rgba(148, 163, 184, 0.14);
+
+        box-shadow:
+            0 18px 50px
+            rgba(0, 0, 0, 0.2);
+
+    }
+
+    .card-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        margin-bottom: 24px;
+
+    }
+
+    .card-title .icon {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+        font-size: 20px;
+
+    }
+
+    .card-title h2 {
+
+        margin: 0;
+
+        font-size: 20px;
+
+    }
+
+    .grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        gap: 18px;
+
+    }
+
+    .full {
+
+        grid-column: 1 / -1;
+
+    }
+
+    label {
+
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #cbd5e1;
+
+        font-size: 14px;
+
+    }
+
+    input,
+    select {
+
+        width: 100%;
+
+        padding: 14px 16px;
+
+        color: white;
+
+        background:
+            rgba(2, 6, 23, 0.8);
+
+        border: 1px solid
+            #334155;
+
+        border-radius: 12px;
+
+        outline: none;
+
+        transition: 0.2s;
+
+        font-size: 15px;
+
+        font-family: inherit;
+
+    }
+
+    input:focus,
+    select:focus {
+
+        border-color: #3b82f6;
+
+        box-shadow:
+            0 0 0 3px
+            rgba(
+                59,
+                130,
+                246,
+                0.15
+            );
+
+    }
+
+    select option {
+
+        background: #020617;
+
+        color: white;
+
+    }
+
+    .location-box {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr
+            1fr
+            auto;
+
+        gap: 12px;
+
+        align-items: end;
+
+    }
+
+    button {
+
+        border: none;
+
+        border-radius: 12px;
+
+        padding: 14px 20px;
+
+        cursor: pointer;
+
+        font-family: inherit;
+
+        font-weight: bold;
+
+        transition: 0.2s;
+
+    }
+
+    button:hover {
+
+        transform:
+            translateY(-2px);
+
+        filter:
+            brightness(1.1);
+
+    }
+
+    button:disabled {
+
+        opacity: 0.5;
+
+        cursor: not-allowed;
+
+        transform: none;
+
+    }
+
+    .location-button {
+
+        background:
+            #334155;
+
+        color: white;
+
+        white-space: nowrap;
+
+    }
+
+    .main-button {
+
+        width: 100%;
+
+        margin-top: 25px;
+
+        padding: 17px;
+
+        font-size: 16px;
+
+        color: white;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+        box-shadow:
+            0 12px 30px
+            rgba(
+                37,
+                99,
+                235,
+                0.25
+            );
+
+    }
+
+    .secondary-button {
+
+        margin-top: 15px;
+
+        color: white;
+
+        background:
+            #334155;
+
+    }
+
+    .status {
+
+        display: none;
+
+        padding: 18px;
+
+        margin-bottom: 22px;
+
+        border-radius: 15px;
+
+        line-height: 2;
+
+    }
+
+    .status.show {
+
+        display: block;
+
+    }
+
+    .status.info {
+
+        color: #bfdbfe;
+
+        background:
+            rgba(
+                30,
+                64,
+                175,
+                0.18
+            );
+
+        border: 1px solid
+            rgba(
+                96,
+                165,
+                250,
+                0.3
+            );
+
+    }
+
+    .status.success {
+
+        color: #bbf7d0;
+
+        background:
+            rgba(
+                22,
+                163,
+                74,
+                0.15
+            );
+
+        border: 1px solid
+            rgba(
+                74,
+                222,
+                128,
+                0.3
+            );
+
+    }
+
+    .status.error {
+
+        color: #fecaca;
+
+        background:
+            rgba(
+                220,
+                38,
+                38,
+                0.15
+            );
+
+        border: 1px solid
+            rgba(
+                248,
+                113,
+                113,
+                0.3
+            );
+
+    }
+
+    .result-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        gap: 14px;
+
+        margin-bottom: 22px;
+
+    }
+
+    .result-item {
+
+        padding: 18px;
+
+        border-radius: 15px;
+
+        background:
+            rgba(
+                2,
+                6,
+                23,
+                0.65
+            );
+
+        border: 1px solid
+            rgba(
+                148,
+                163,
+                184,
+                0.12
+            );
+
+    }
+
+    .result-item small {
+
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #94a3b8;
+
+    }
+
+    .result-item strong {
+
+        font-size: 18px;
+
+        color: #e0f2fe;
+
+    }
+
+    .product-info {
+
+        margin-top: 15px;
+
+        padding: 18px;
+
+        border-radius: 15px;
+
+        color: #bfdbfe;
+
+        background:
+            rgba(
+                30,
+                64,
+                175,
+                0.18
+            );
+
+        border: 1px solid
+            rgba(
+                96,
+                165,
+                250,
+                0.2
+            );
+
+        line-height: 2;
+
+    }
+
+    .stock-good {
+
+        color: #86efac;
+
+    }
+
+    .stock-low {
+
+        color: #fca5a5;
+
+    }
+
+    pre {
+
+        margin: 0;
+
+        padding: 20px;
+
+        overflow-x: auto;
+
+        white-space: pre-wrap;
+
+        word-break: break-word;
+
+        direction: ltr;
+
+        text-align: left;
+
+        color: #cbd5e1;
+
+        background:
+            #020617;
+
+        border-radius: 14px;
+
+        border: 1px solid
+            #1e293b;
+
+    }
+
+    .steps {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                5,
+                1fr
+            );
+
+        gap: 12px;
+
+    }
+
+    .step {
+
+        padding: 16px;
+
+        text-align: center;
+
+        border-radius: 15px;
+
+        color: #94a3b8;
+
+        background:
+            rgba(
+                2,
+                6,
+                23,
+                0.55
+            );
+
+        border: 1px solid
+            #1e293b;
+
+        transition: 0.3s;
+
+    }
+
+    .step.active {
+
+        color: white;
+
+        border-color:
+            #3b82f6;
+
+        background:
+            rgba(
+                30,
+                64,
+                175,
+                0.3
+            );
+
+    }
+
+    .step.done {
+
+        color: #bbf7d0;
+
+        border-color:
+            #22c55e;
+
+    }
+
+    .step-number {
+
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-size: 24px;
+
+    }
+
+    @media (
+        max-width: 800px
+    ) {
+
+        .grid {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+        .full {
+
+            grid-column:
+                auto;
+
+        }
+
+        .location-box {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+        .result-grid {
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    1fr
+                );
+
+        }
+
+        .steps {
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    1fr
+                );
+
+        }
+
+    }
+
+    @media (
+        max-width: 500px
+    ) {
+
+        .hero,
+        .card {
+
+            padding: 20px;
+
+        }
+
+        .result-grid {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<section class="hero">
+
+
+<span class="badge">
+
+    🚚 سیستم هوشمند مدیریت و مسیریابی انبار
+
+</span>
+
+<h1>
+
+    ارسال سفارش،
+    هوشمندتر از همیشه
+
+</h1>
+
+<p>
+
+    محصول مورد نظر خود را از لیست انتخاب کنید،
+    تعداد سفارش را وارد کنید و موقعیت تحویل را مشخص کنید.
+    سیستم به‌صورت خودکار بهترین انبار دارای موجودی کافی
+    و بهینه‌ترین مسیر را پیدا می‌کند.
+
+</p>
+
+
+</section>
+
+<div
+    id="status"
+    class="status"
+></div>
+
+<section class="card">
+
+
+<div class="card-title">
+
+    <div class="icon">
+        📦
+    </div>
+
+    <h2>
+        انتخاب محصول
+    </h2>
+
+</div>
+
+<div class="grid">
+
+    <div class="full">
+
+        <label>
+            محصول مورد نظر
+        </label>
+
+        <select
+            id="skuSelect"
+            onchange="handleProductChange()"
+        >
+
+            <option value="">
+
+                در حال دریافت محصولات...
+
+            </option>
+
+        </select>
+
+    </div>
+
+    <div>
+
+        <label>
+            تعداد مورد نیاز
+        </label>
+
+        <input
+            id="quantity"
+            type="number"
+            min="1"
+            value="10"
+            oninput="validateQuantity()"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            نام مشتری
+        </label>
+
+        <input
+            id="customerName"
+            value="مشتری آزمایشی"
+            placeholder="نام مشتری"
+        >
+
+    </div>
+
+</div>
+
+<div
+    id="productInfo"
+    class="product-info"
+    style="display: none;"
+></div>
+
+<button
+    class="secondary-button"
+    onclick="loadProducts()"
+>
+
+    🔄 دریافت مجدد محصولات و موجودی
+
+</button>
+
+
+</section>
+
+<section class="card">
+
+
+<div class="card-title">
+
+    <div class="icon">
+        📍
+    </div>
+
+    <h2>
+        موقعیت تحویل سفارش
+    </h2>
+
+</div>
+
+<div class="location-box">
+
+    <div>
+
+        <label>
+            عرض جغرافیایی
+        </label>
+
+        <input
+            id="latitude"
+            value="35.6892"
+            placeholder="مثلاً 35.6892"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            طول جغرافیایی
+        </label>
+
+        <input
+            id="longitude"
+            value="51.3890"
+            placeholder="مثلاً 51.3890"
+        >
+
+    </div>
+
+    <button
+        class="location-button"
+        onclick="getLocation()"
+    >
+
+        📍 دریافت لوکیشن من
+
+    </button>
+
+</div>
+
+<button
+    id="submitButton"
+    class="main-button"
+    onclick="submitOrder()"
+>
+
+    🚀 ثبت سفارش و پیدا کردن بهترین انبار
+
+</button>
+
+
+</section>
+
+<section class="card">
+
+
+<div class="card-title">
+
+    <div class="icon">
+        ⚙️
+    </div>
+
+    <h2>
+        وضعیت عملیات
+    </h2>
+
+</div>
+
+<div class="steps">
+
+    <div
+        id="step1"
+        class="step"
+    >
+
+        <span
+            class="step-number"
+        >
+            1
+        </span>
+
+        دریافت محصولات
+
+    </div>
+
+    <div
+        id="step2"
+        class="step"
+    >
+
+        <span
+            class="step-number"
+        >
+            2
+        </span>
+
+        بررسی موجودی
+
+    </div>
+
+    <div
+        id="step3"
+        class="step"
+    >
+
+        <span
+            class="step-number"
+        >
+            3
+        </span>
+
+        ثبت سفارش
+
+    </div>
+
+    <div
+        id="step4"
+        class="step"
+    >
+
+        <span
+            class="step-number"
+        >
+            4
+        </span>
+
+        بهینه‌سازی مسیر
+
+    </div>
+
+    <div
+        id="step5"
+        class="step"
+    >
+
+        <span
+            class="step-number"
+        >
+            5
+        </span>
+
+        تکمیل
+
+    </div>
+
+</div>
+
+
+</section>
+
+<section
+    id="resultCard"
+    class="card"
+    style="display: none;"
+>
+
+
+<div class="card-title">
+
+    <div class="icon">
+        ✅
+    </div>
+
+    <h2>
+        نتیجه بهینه‌سازی
+    </h2>
+
+</div>
+
+<div
+    id="resultGrid"
+    class="result-grid"
+></div>
+
+<h3>
+    جزئیات کامل پاسخ API
+</h3>
+
+<pre
+    id="result"
+></pre>
+
+
+</section>
+
+</div>
+
+<script>
+
+    const API_BASE_URL =
+        "http://127.0.0.1:8000/api";
+
+    const SKU_LIST_ENDPOINT =
+        "/inventory/skus/";
+
+    const STOCK_LIST_ENDPOINT =
+        "/inventory/stock/";
+
+    let authToken =
+        null;
+
+    let refreshToken =
+        null;
+
+    let createdSKU =
+        null;
+
+    let createdOrder =
+        null;
+
+    let stockList =
+        [];
+
+    function setStatus(
+        message,
+        type = "info"
+    ) {
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+        status.className =
+            `status show ${type}`;
+
+        status.innerHTML =
+            message;
+
+    }
+
+    function setStep(
+        stepNumber,
+        state
+    ) {
+
+        const step =
+            document.getElementById(
+                `step${stepNumber}`
+            );
+
+        step.classList.remove(
+            "active",
+            "done"
+        );
+
+        if (
+            state === "active"
+        ) {
+
+            step.classList.add(
+                "active"
+            );
+
+        }
+
+        if (
+            state === "done"
+        ) {
+
+            step.classList.add(
+                "done"
+            );
+
+        }
+
+    }
+
+    function showResult(
+        data
+    ) {
+
+        document.getElementById(
+            "resultCard"
+        ).style.display =
+            "block";
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            JSON.stringify(
+                data,
+                null,
+                2
+            );
+
+    }
+
+    function extractList(
+        data
+    ) {
+
+        if (
+            Array.isArray(
+                data
+            )
+        ) {
+
+            return data;
+
+        }
+
+        if (
+            data &&
+            Array.isArray(
+                data.results
+            )
+        ) {
+
+            return data.results;
+
+        }
+
+        return [];
+
+    }
+
+    function getAvailableQuantity(
+        stock
+    ) {
+
+        if (
+            stock.available_quantity !==
+            undefined &&
+            stock.available_quantity !==
+            null
+        ) {
+
+            return Number(
+                stock.available_quantity
+            );
+
+        }
+
+        return (
+
+            Number(
+                stock.quantity || 0
+            )
+
+            -
+
+            Number(
+                stock.reserved_quantity || 0
+            )
+
+        );
+
+    }
+
+    async function refreshAccessToken() {
+
+        if (
+            !refreshToken
+        ) {
+
+            return false;
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `${API_BASE_URL}/users/refresh/`,
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        credentials:
+                            "include",
+
+                        body:
+                            JSON.stringify(
+
+                                {
+
+                                    refresh:
+                                        refreshToken
+
+                                }
+
+                            )
+
+                    }
+
+                );
+
+            if (
+                !response.ok
+            ) {
+
+                return false;
+
+            }
+
+            const data =
+                await response.json();
+
+            authToken =
+                data.access ||
+                data.access_token;
+
+            return Boolean(
+                authToken
+            );
+
+        }
+
+        catch {
+
+            return false;
+
+        }
+
+    }
+
+    async function apiRequest(
+
+        endpoint,
+
+        options = {},
+
+        retry = true
+
+    ) {
+
+        const headers = {
+
+            "Content-Type":
+                "application/json",
+
+            ...(options.headers || {})
+
+        };
+
+        if (
+            authToken
+        ) {
+
+            headers[
+                "Authorization"
+            ] =
+                `Bearer ${authToken}`;
+
+        }
+
+        const response =
+            await fetch(
+
+                `${API_BASE_URL}${endpoint}`,
+
+                {
+
+                    ...options,
+
+                    headers,
+
+                    credentials:
+                        "include"
+
+                }
+
+            );
+
+        if (
+
+            response.status === 401 &&
+
+            retry &&
+
+            refreshToken
+
+        ) {
+
+            const refreshed =
+                await refreshAccessToken();
+
+            if (
+                refreshed
+            ) {
+
+                return apiRequest(
+
+                    endpoint,
+
+                    options,
+
+                    false
+
+                );
+
+            }
+
+        }
+
+        const rawText =
+            await response.text();
+
+        let data;
+
+        try {
+
+            data =
+                rawText
+                    ? JSON.parse(
+                        rawText
+                    )
+                    : null;
+
+        }
+
+        catch {
+
+            data =
+                rawText;
+
+        }
+
+        if (
+            !response.ok
+        ) {
+
+            throw {
+
+                status:
+                    response.status,
+
+                data
+
+            };
+
+        }
+
+        return data;
+
+    }
+
+    async function loadProducts() {
+
+        try {
+
+            setStatus(
+
+                "در حال دریافت محصولات و موجودی واقعی انبار...",
+
+                "info"
+
+            );
+
+            setStep(
+                1,
+                "active"
+            );
+
+            const [
+
+                skuResponse,
+
+                stockResponse
+
+            ] =
+                await Promise.all(
+
+                    [
+
+                        apiRequest(
+                            SKU_LIST_ENDPOINT
+                        ),
+
+                        apiRequest(
+                            STOCK_LIST_ENDPOINT
+                        )
+
+                    ]
+
+                );
+
+            const products =
+                extractList(
+                    skuResponse
+                );
+
+            stockList =
+                extractList(
+                    stockResponse
+                );
+
+            const select =
+                document.getElementById(
+                    "skuSelect"
+                );
+
+            select.innerHTML = `
+
+                <option value="">
+
+                    یک محصول را انتخاب کنید
+
+                </option>
+
+            `;
+
+            products
+                .filter(
+
+                    function (
+                        product
+                    ) {
+
+                        return (
+
+                            product.is_active !==
+                            false
+
+                        );
+
+                    }
+
+                )
+                .forEach(
+
+                    function (
+                        product
+                    ) {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value =
+                            product.id;
+
+                        option.textContent =
+
+                            `${product.code} - ${product.name}`;
+
+                        option.dataset.product =
+                            JSON.stringify(
+                                product
+                            );
+
+                        select.appendChild(
+                            option
+                        );
+
+                    }
+
+                );
+
+            setStep(
+                1,
+                "done"
+            );
+
+            setStatus(
+
+                `${products.length} محصول از API محصولات دریافت شد. یک محصول را انتخاب کنید.`,
+
+                "success"
+
+            );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            handleError(
+
+                "دریافت محصولات ناموفق بود",
+
+                error
+
+            );
+
+        }
+
+    }
+
+    function findStockForSKU(
+        sku
+    ) {
+
+        const skuId =
+            Number(
+                sku.id
+            );
+
+        const skuCode =
+            String(
+                sku.code || ""
+            )
+                .trim()
+                .toLowerCase();
+
+        return stockList.filter(
+
+            function (
+                stock
+            ) {
+
+                const stockSkuId =
+                    Number(
+                        stock.sku
+                    );
+
+                const stockSkuCode =
+                    String(
+                        stock.sku_code || ""
+                    )
+                        .trim()
+                        .toLowerCase();
+
+                return (
+
+                    stockSkuId ===
+                    skuId
+
+                    ||
+
+                    (
+
+                        skuCode &&
+                        stockSkuCode &&
+                        skuCode ===
+                        stockSkuCode
+
+                    )
+
+                );
+
+            }
+
+        );
+
+    }
+
+    function getTotalAvailableForSKU(
+        sku
+    ) {
+
+        const matchingStock =
+            findStockForSKU(
+                sku
+            );
+
+        return matchingStock.reduce(
+
+            function (
+                total,
+                stock
+            ) {
+
+                return (
+
+                    total
+
+                    +
+
+                    getAvailableQuantity(
+                        stock
+                    )
+
+                );
+
+            },
+
+            0
+
+        );
+
+    }
+
+    function handleProductChange() {
+
+        const select =
+            document.getElementById(
+                "skuSelect"
+            );
+
+        const option =
+            select.options[
+                select.selectedIndex
+            ];
+
+        if (
+
+            !option ||
+
+            !option.value
+
+        ) {
+
+            createdSKU =
+                null;
+
+            document.getElementById(
+                "productInfo"
+            ).style.display =
+                "none";
+
+            return;
+
+        }
+
+        createdSKU =
+            JSON.parse(
+                option.dataset.product
+            );
+
+        const matchingStock =
+            findStockForSKU(
+                createdSKU
+            );
+
+        const available =
+            getTotalAvailableForSKU(
+                createdSKU
+            );
+
+        createdSKU.available_quantity =
+            available;
+
+        createdSKU.matching_stock =
+            matchingStock;
+
+        const info =
+            document.getElementById(
+                "productInfo"
+            );
+
+        info.style.display =
+            "block";
+
+        if (
+            matchingStock.length ===
+            0
+        ) {
+
+            info.innerHTML = `
+
+                <strong>
+                    محصول انتخاب‌شده:
+                </strong>
+
+                ${createdSKU.name || "-"}
+
+                <br>
+
+                <strong>
+                    کد محصول:
+                </strong>
+
+                ${createdSKU.code || "-"}
+
+                <br>
+
+                <strong>
+                    شناسه SKU:
+                </strong>
+
+                ${createdSKU.id}
+
+                <br><br>
+
+                <span class="stock-low">
+
+                    ⚠️ برای این SKU هیچ رکورد موجودی مطابق
+                    در API /inventory/stock/ پیدا نشد.
+
+                </span>
+
+            `;
+
+            setStatus(
+
+                "برای این محصول رکورد موجودی مرتبط پیدا نشد.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        info.innerHTML = `
+
+            <strong>
+                محصول انتخاب‌شده:
+            </strong>
+
+            ${createdSKU.name || "-"}
+
+            <br>
+
+            <strong>
+                کد محصول:
+            </strong>
+
+            ${createdSKU.code || "-"}
+
+            <br>
+
+            <strong>
+                شناسه SKU:
+            </strong>
+
+            ${createdSKU.id}
+
+            <br>
+
+            <strong>
+                موجودی قابل فروش:
+            </strong>
+
+            <span class="stock-good">
+
+                ${available}
+
+                عدد
+
+            </span>
+
+        `;
+
+        setStep(
+            1,
+            "done"
+        );
+
+        validateQuantity();
+
+    }
+
+    function validateQuantity() {
+
+        if (
+            !createdSKU
+        ) {
+
+            return;
+
+        }
+
+        const quantity =
+            Number(
+
+                document.getElementById(
+                    "quantity"
+                ).value
+
+            );
+
+        const available =
+            Number(
+
+                createdSKU.available_quantity
+
+            );
+
+        if (
+
+            !Number.isInteger(
+                quantity
+            )
+
+            ||
+
+            quantity <= 0
+
+        ) {
+
+            return;
+
+        }
+
+        if (
+
+            quantity >
+            available
+
+        ) {
+
+            setStatus(
+
+                `
+
+                    <strong>
+                        موجودی کافی نیست ❌
+                    </strong>
+
+                    <br>
+
+                    موجودی قابل فروش:
+                    ${available}
+
+                    <br>
+
+                    تعداد درخواستی:
+                    ${quantity}
+
+                `,
+
+                "error"
+
+            );
+
+        }
+
+        else {
+
+            setStatus(
+
+                `
+
+                    موجودی کافی است ✅
+
+                    <br>
+
+                    موجودی قابل فروش:
+                    ${available}
+
+                    |
+
+                    تعداد درخواستی:
+                    ${quantity}
+
+                `,
+
+                "success"
+
+            );
+
+        }
+
+    }
+
+    async function findWarehouseWithInventory(
+
+        sku,
+
+        quantity
+
+    ) {
+
+        setStatus(
+
+            "در حال بررسی موجودی محصول در انبارها...",
+
+            "info"
+
+        );
+
+        setStep(
+            2,
+            "active"
+        );
+
+        const matchingStock =
+            findStockForSKU(
+                sku
+            );
+
+        const validStock =
+            matchingStock.filter(
+
+                function (
+                    stock
+                ) {
+
+                    return (
+
+                        getAvailableQuantity(
+                            stock
+                        )
+
+                        >=
+
+                        quantity
+
+                    );
+
+                }
+
+            );
+
+        if (
+            validStock.length ===
+            0
+        ) {
+
+            throw {
+
+                message:
+
+                    `برای محصول ${sku.name} هیچ انباری موجودی قابل فروش کافی ندارد.`
+
+            };
+
+        }
+
+        const selectedStock =
+            validStock[0];
+
+        setStep(
+            2,
+            "done"
+        );
+
+        return selectedStock;
+
+    }
+
+    async function createOrder() {
+
+        setStatus(
+
+            "در حال ثبت سفارش...",
+
+            "info"
+
+        );
+
+        setStep(
+            3,
+            "active"
+        );
+
+        const payload = {
+
+            sku:
+                Number(
+                    createdSKU.id
+                ),
+
+            quantity:
+                Number(
+
+                    document.getElementById(
+                        "quantity"
+                    ).value
+
+                ),
+
+            customer_latitude:
+                Number(
+
+                    document.getElementById(
+                        "latitude"
+                    ).value
+
+                ),
+
+            customer_longitude:
+                Number(
+
+                    document.getElementById(
+                        "longitude"
+                    ).value
+
+                )
+
+        };
+
+        console.log(
+            "Order payload:",
+            payload
+        );
+
+        createdOrder =
+            await apiRequest(
+
+                "/orders/",
+
+                {
+
+                    method:
+                        "POST",
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+
+                }
+
+            );
+
+        setStep(
+            3,
+            "done"
+        );
+
+        return createdOrder;
+
+    }
+
+    async function optimizeRoute() {
+
+        setStatus(
+
+            "در حال پیدا کردن بهترین مسیر و انبار...",
+
+            "info"
+
+        );
+
+        setStep(
+            4,
+            "active"
+        );
+
+        const payload = {
+
+            sku_id:
+                createdOrder.sku,
+
+            quantity:
+                createdOrder.quantity,
+
+            customer_latitude:
+                createdOrder.customer_latitude,
+
+            customer_longitude:
+                createdOrder.customer_longitude
+
+        };
+
+        console.log(
+            "Optimization payload:",
+            payload
+        );
+
+        const result =
+            await apiRequest(
+
+                "/routing/optimize/",
+
+                {
+
+                    method:
+                        "POST",
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+
+                }
+
+            );
+
+        setStep(
+            4,
+            "done"
+        );
+
+        setStep(
+            5,
+            "done"
+        );
+
+        return result;
+
+    }
+
+    function displayOptimizationResult(
+        result
+    ) {
+
+        const resultGrid =
+            document.getElementById(
+                "resultGrid"
+            );
+
+        resultGrid.innerHTML = `
+
+            <div class="result-item">
+
+                <small>
+                    انبار انتخاب‌شده
+                </small>
+
+                <strong>
+                    ${result.warehouse_name || "-"}
+
+                </strong>
+
+            </div>
+
+            <div class="result-item">
+
+                <small>
+                    کد انبار
+                </small>
+
+                <strong>
+                    ${result.warehouse_code || "-"}
+
+                </strong>
+
+            </div>
+
+            <div class="result-item">
+
+                <small>
+                    زمان تخمینی تحویل
+                </small>
+
+                <strong>
+                    ${result.estimated_delivery_time || "-"}
+
+                </strong>
+
+            </div>
+
+            <div class="result-item">
+
+                <small>
+                    فاصله
+                </small>
+
+                <strong>
+                    ${result.distance_km || 0}
+
+                    km
+
+                </strong>
+
+            </div>
+
+            <div class="result-item">
+
+                <small>
+                    هزینه کل
+                </small>
+
+                <strong>
+                    ${result.total_cost || "-"}
+
+                </strong>
+
+            </div>
+
+            <div class="result-item">
+
+                <small>
+                    امتیاز بهینه‌سازی
+                </small>
+
+                <strong>
+                    ${result.route_optimization_score || "-"}
+
+                </strong>
+
+            </div>
+
+        `;
+
+    }
+
+    async function submitOrder() {
+
+        const button =
+            document.getElementById(
+                "submitButton"
+            );
+
+        button.disabled =
+            true;
+
+        document.getElementById(
+            "resultCard"
+        ).style.display =
+            "none";
+
+        try {
+
+            if (
+
+                !createdSKU ||
+
+                !createdSKU.id
+
+            ) {
+
+                throw {
+
+                    message:
+
+                        "لطفاً ابتدا یک محصول از لیست انتخاب کنید."
+
+                };
+
+            }
+
+            const quantity =
+                Number(
+
+                    document.getElementById(
+                        "quantity"
+                    ).value
+
+                );
+
+            if (
+
+                !Number.isInteger(
+                    quantity
+                )
+
+                ||
+
+                quantity <= 0
+
+            ) {
+
+                throw {
+
+                    message:
+
+                        "تعداد محصول باید یک عدد صحیح بیشتر از صفر باشد."
+
+                };
+
+            }
+
+            const available =
+                Number(
+
+                    createdSKU.available_quantity
+
+                );
+
+            if (
+
+                quantity >
+                available
+
+            ) {
+
+                throw {
+
+                    message:
+
+                        `موجودی کافی نیست. موجودی قابل فروش: ${available} عدد`
+
+                };
+
+            }
+
+            const latitude =
+                Number(
+
+                    document.getElementById(
+                        "latitude"
+                    ).value
+
+                );
+
+            const longitude =
+                Number(
+
+                    document.getElementById(
+                        "longitude"
+                    ).value
+
+                );
+
+            if (
+
+                Number.isNaN(
+                    latitude
+                )
+
+                ||
+
+                Number.isNaN(
+                    longitude
+                )
+
+            ) {
+
+                throw {
+
+                    message:
+
+                        "مختصات جغرافیایی معتبر وارد کنید."
+
+                };
+
+            }
+
+            await findWarehouseWithInventory(
+
+                createdSKU,
+
+                quantity
+
+            );
+
+            const order =
+                await createOrder();
+
+            const result =
+                await optimizeRoute();
+
+            displayOptimizationResult(
+                result
+            );
+
+            setStatus(
+
+                `
+
+                    <strong>
+                        سفارش شما با موفقیت ثبت شد 🎉
+                    </strong>
+
+                    <br>
+
+                    سیستم بهترین انبار و مسیر ممکن
+                    را برای ارسال سفارش پیدا کرد.
+
+                `,
+
+                "success"
+
+            );
+
+            showResult(
+
+                {
+
+                    order,
+
+                    optimization:
+                        result
+
+                }
+
+            );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            console.error(
+                error
+            );
+
+            let message =
+                error.message;
+
+            if (
+                error.data
+            ) {
+
+                message =
+                    error.data;
+
+            }
+
+            if (
+
+                typeof message ===
+                "object"
+
+            ) {
+
+                message =
+                    JSON.stringify(
+
+                        message,
+
+                        null,
+
+                        2
+
+                    );
+
+            }
+
+            setStatus(
+
+                `
+
+                    <strong>
+                        عملیات ناموفق بود ❌
+                    </strong>
+
+                    <br>
+
+                    ${message}
+
+                `,
+
+                "error"
+
+            );
+
+            showResult(
+
+                {
+
+                    status:
+                        error.status,
+
+                    error:
+                        error.data ||
+
+                        error.message
+
+                }
+
+            );
+
+        }
+
+        finally {
+
+            button.disabled =
+                false;
+
+        }
+
+    }
+
+    function handleError(
+
+        title,
+
+        error
+
+    ) {
+
+        console.error(
+
+            title,
+
+            error
+
+        );
+
+        let message =
+            error.data ||
+
+            error.message;
+
+        if (
+
+            typeof message ===
+            "object"
+
+        ) {
+
+            message =
+                JSON.stringify(
+
+                    message,
+
+                    null,
+
+                    2
+
+                );
+
+        }
+
+        setStatus(
+
+            `
+
+                <strong>
+                    ${title}
+                </strong>
+
+                <br>
+
+                ${message}
+
+            `,
+
+            "error"
+
+        );
+
+        showResult(
+
+            {
+
+                status:
+                    error.status,
+
+                error:
+                    error.data ||
+
+                    error.message
+
+            }
+
+        );
+
+    }
+
+    document.addEventListener(
+
+        "DOMContentLoaded",
+
+        function () {
+
+            loadProducts();
+
+        }
+
+    );
+
+</script>
+
+</body>
+
+</html>

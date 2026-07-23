@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        تأیید شماره موبایل
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    #172554,
+                    #020617 55%
+                );
+
+            color: #f8fafc;
+
+        }
+
+        .container {
+
+            width: min(
+                460px,
+                100%
+            );
+
+        }
+
+        .card {
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.92
+                );
+
+            border: 1px solid
+                rgba(
+                    148,
+                    163,
+                    184,
+                    0.18
+                );
+
+            box-shadow:
+                0 25px 80px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.4
+                );
+
+        }
+
+        .icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 20px;
+
+            border-radius: 22px;
+
+            font-size: 32px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+        }
+
+        h1 {
+
+            margin: 0 0 12px;
+
+        }
+
+        p {
+
+            color: #94a3b8;
+
+            line-height: 2;
+
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 16px;
+
+            margin-top: 15px;
+
+            color: white;
+
+            background:
+                rgba(
+                    2,
+                    6,
+                    23,
+                    0.8
+                );
+
+            border: 1px solid
+                #334155;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            text-align: center;
+
+            letter-spacing: 8px;
+
+            font-size: 24px;
+
+        }
+
+        input:focus {
+
+            border-color:
+                #3b82f6;
+
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 20px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            font-family: inherit;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+        button:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+        .resend-button {
+
+            margin-top: 12px;
+
+            background:
+                #334155;
+
+        }
+
+        .status {
+
+            display: none;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            border-radius: 12px;
+
+            line-height: 1.8;
+
+            font-size: 14px;
+
+        }
+
+        .status.show {
+
+            display: block;
+
+        }
+
+        .status.success {
+
+            color: #bbf7d0;
+
+            background:
+                rgba(
+                    22,
+                    163,
+                    74,
+                    0.15
+                );
+
+        }
+
+        .status.error {
+
+            color: #fecaca;
+
+            background:
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.15
+                );
+
+        }
+
+        .status.info {
+
+            color: #bfdbfe;
+
+            background:
+                rgba(
+                    30,
+                    64,
+                    175,
+                    0.18
+                );
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="icon">
+            🔐
+        </div>
+
+        <h1>
+            تأیید شماره موبایل
+        </h1>
+
+        <p>
+
+            کد شش رقمی ارسال‌شده به شماره موبایل
+            خود را وارد کنید.
+
+        </p>
+
+        <input
+            id="otp"
+            type="text"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="------"
+        >
+
+        <button
+            id="verifyButton"
+        >
+
+            تأیید و ایجاد حساب
+
+        </button>
+
+        <button
+            id="resendButton"
+            class="resend-button"
+        >
+
+            ارسال مجدد کد
+
+        </button>
+
+        <div
+            id="status"
+            class="status"
+        ></div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const API_BASE_URL =
+        "http://127.0.0.1:8000/api";
+
+
+    const phoneNumber =
+        localStorage.getItem(
+            "pending_phone_number"
+        );
+
+
+    function setStatus(
+        message,
+        type = "info"
+    ) {
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+        status.className =
+            `status show ${type}`;
+
+        status.innerHTML =
+            message;
+
+    }
+
+
+    document
+        .getElementById(
+            "verifyButton"
+        )
+        .addEventListener(
+
+            "click",
+
+            async function () {
+
+                const button =
+                    document.getElementById(
+                        "verifyButton"
+                    );
+
+
+                const otp =
+                    document
+                        .getElementById(
+                            "otp"
+                        )
+                        .value
+                        .trim();
+
+
+                if (
+                    !phoneNumber
+                ) {
+
+                    setStatus(
+                        "شماره موبایل ثبت‌نام پیدا نشد.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    otp.length !== 6
+                ) {
+
+                    setStatus(
+                        "کد تأیید باید ۶ رقم باشد.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                button.disabled =
+                    true;
+
+
+                setStatus(
+                    "در حال تأیید کد...",
+                    "info"
+                );
+
+
+                try {
+
+                    const response =
+                        await fetch(
+
+                            `${API_BASE_URL}/users/verify-otp/`,
+
+                            {
+
+                                method:
+                                    "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                credentials:
+                                    "include",
+
+                                body:
+                                    JSON.stringify(
+
+                                        {
+
+                                            phone_number:
+                                                phoneNumber,
+
+                                            otp
+
+                                        }
+
+                                    )
+
+                            }
+
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok
+                    ) {
+
+                        throw data;
+
+                    }
+
+
+                    localStorage.removeItem(
+                        "pending_phone_number"
+                    );
+
+
+                    setStatus(
+
+                        "ثبت‌نام با موفقیت انجام شد. در حال انتقال...",
+
+                        "success"
+
+                    );
+
+
+                    setTimeout(
+
+                        function () {
+
+                            window.location.href =
+                                "warehouse.html";
+
+                        },
+
+                        1200
+
+                    );
+
+                }
+
+                catch (
+                    error
+                ) {
+
+                    setStatus(
+
+                        error.detail ||
+                        error.message ||
+                        JSON.stringify(
+                            error
+                        ),
+
+                        "error"
+
+                    );
+
+                    button.disabled =
+                        false;
+
+                }
+
+            }
+
+        );
+
+
+    document
+        .getElementById(
+            "resendButton"
+        )
+        .addEventListener(
+
+            "click",
+
+            async function () {
+
+                try {
+
+                    const response =
+                        await fetch(
+
+                            `${API_BASE_URL}/users/resend-otp/`,
+
+                            {
+
+                                method:
+                                    "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                credentials:
+                                    "include",
+
+                                body:
+                                    JSON.stringify(
+
+                                        {
+
+                                            phone_number:
+                                                phoneNumber
+
+                                        }
+
+                                    )
+
+                            }
+
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok
+                    ) {
+
+                        throw data;
+
+                    }
+
+
+                    setStatus(
+
+                        "کد جدید با موفقیت ارسال شد.",
+
+                        "success"
+
+                    );
+
+                }
+
+                catch (
+                    error
+                ) {
+
+                    setStatus(
+
+                        error.detail ||
+                        error.message ||
+                        JSON.stringify(
+                            error
+                        ),
+
+                        "error"
+
+                    );
+
+                }
+
+            }
+
+        );
+
+</script>
+
+</body>
+
+</html>
